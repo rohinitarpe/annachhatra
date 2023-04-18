@@ -169,15 +169,30 @@ class _DonateScreenState extends State<DonateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: checkbox,
-                      activeColor: Colors.black54,
-                      onChanged: (value){
-                        setState(() {
-                          checkbox = !checkbox;
-                        });
-                      },
+                    Material(
+                      child: Checkbox(
+                        value: checkbox,
+                        onChanged: (bool?value){
+                          setState(() {
+                            checkbox = value!;
+                            if(checkbox = false){
+                              print('true' + checkbox.toString());
+                            }else{
+                              print('false'+checkbox.toString());
+                            }
+                          });
+                        }
+                      ),
                     ),
+                    // Checkbox(
+                    //   value: checkbox,
+                    //   activeColor: Colors.black54,
+                    //   onChanged: (value){
+                    //     setState(() {
+                    //       checkbox = !checkbox;
+                    //     });
+                    //   },
+                    // ),
                     Text('Non Veg',
                       style: TextStyle(
                           fontSize: 12,
