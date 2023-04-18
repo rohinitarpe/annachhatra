@@ -169,20 +169,18 @@ class _DonateScreenState extends State<DonateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Material(
-                      child: Checkbox(
-                        value: checkbox,
-                        onChanged: (bool?value){
-                          setState(() {
-                            checkbox = value!;
-                            if(checkbox = false){
-                              print('true' + checkbox.toString());
-                            }else{
-                              print('false'+checkbox.toString());
-                            }
-                          });
-                        }
-                      ),
+                    Checkbox(
+                      value: checkbox,
+                      onChanged: (bool?value){
+                        setState(() {
+                          checkbox = value!;
+                          if(checkbox = false){
+                            print('true' + checkbox.toString());
+                          }else{
+                            print('false'+checkbox.toString());
+                          }
+                        });
+                      }
                     ),
                     // Checkbox(
                     //   value: checkbox,
