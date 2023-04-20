@@ -15,4 +15,14 @@ class Food{
   }
 }
 
+class Hotel{
+  final String hotelimage;
+  final String hotelname;
+  final String hotelinfo;
+  String qunatity;
+  final onViwbtn;
+
+  Hotel({required this.hotelimage, required this.hotelname, required this.hotelinfo,required this.qunatity,required this.onViwbtn});
+}
+
 

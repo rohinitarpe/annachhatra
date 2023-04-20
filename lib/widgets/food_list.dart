@@ -31,3 +31,28 @@ class FoodList extends StatelessWidget {
     );
   }
 }
+
+class HotelList extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<HotelData>(
+        builder: (context,hotelData,child){
+          return ListView.builder(
+            shrinkWrap: true,
+              itemBuilder: (context,index){
+              final hotel = hotelData.hotels[index];
+              return HotelTile(
+                  hotelimageTile: hotel.hotelimage,
+                  qunatityTile: hotel.qunatity,
+                  namehotelTile: hotel.hotelname,
+                  infohotelTile: hotel.hotelinfo,
+                  onPressedTile: hotel.onViwbtn,
+              );
+              },
+            itemCount: hotelData.hotelCount,
+          );
+    },
+    );
+  }
+}

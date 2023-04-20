@@ -26,8 +26,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FoodData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context)=>FoodData()),
+        ChangeNotifierProvider(create: (context)=>HotelData()),
+      ],
       child: MaterialApp(
         initialRoute: LoginScreen.id,
         routes: {

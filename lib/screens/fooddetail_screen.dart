@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:annachhatra/screens/home_screen.dart';
 
@@ -9,6 +10,7 @@ class FoodDetailScreen extends StatefulWidget {
 }
 
 class _FoodDetailScreenState extends State<FoodDetailScreen> {
+  FirebaseFirestore db =FirebaseFirestore.instance;
 //   @override
   bool checkbox = false;
 
@@ -181,8 +183,10 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     message: 'Please do collect the parcel from counter',
                     onPressed: (){
                       Navigator.pushNamed(context, HomeScreen.id);
-                    },
-
+                      db.collection('orders').add({
+                        'order_availability' : checkbox.toString(),
+                      });
+                    }
                   ),
                 ],
               )

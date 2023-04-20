@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:annachhatra/models/add_dish.dart';
 import 'package:annachhatra/models/food_data.dart';
@@ -16,6 +18,7 @@ class DonateScreen extends StatefulWidget {
 }
 
 class _DonateScreenState extends State<DonateScreen> {
+  FirebaseFirestore db =FirebaseFirestore.instance;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
@@ -100,11 +103,15 @@ class _DonateScreenState extends State<DonateScreen> {
                   // nameController.clear();
                   // quantityController.clear();
                   Provider.of<FoodData>(context,listen: false).addFood(newFoodName, newFoodQuantity);
-                  CollectionReference colRef = FirebaseFirestore.instance.collection('orders');
-                  colRef.add({
-                    'dish_name': nameController.text,
-                    'quantity' : quantityController.text,
+                  db.collection('orders').add({
+                    'dish_name' : nameController.text,
+                    'quantity' : newFoodQuantity.length,
                   });
+                  // CollectionReference colRef = FirebaseFirestore.instance.collection('orders');
+                  // colRef.add({
+                  //   'dish_name': nameController.text,
+                  //   'quantity' : quantityController.text,
+                  // });
                    //Navigator.pop(context);
                 },
                 child: Container(
@@ -169,28 +176,28 @@ class _DonateScreenState extends State<DonateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: checkbox,
-                      onChanged: (bool?value){
-                        setState(() {
-                          checkbox = value!;
-                          if(checkbox = false){
-                            print('true' + checkbox.toString());
-                          }else{
-                            print('false'+checkbox.toString());
-                          }
-                        });
-                      }
-                    ),
                     // Checkbox(
                     //   value: checkbox,
-                    //   activeColor: Colors.black54,
-                    //   onChanged: (value){
+                    //   onChanged: (bool?value){
                     //     setState(() {
-                    //       checkbox = !checkbox;
+                    //       checkbox = value!;
+                    //       if(checkbox = false){
+                    //         print('true' + checkbox.toString());
+                    //       }else{
+                    //         print('false'+checkbox.toString());
+                    //       }
                     //     });
-                    //   },
+                    //   }
                     // ),
+                    Checkbox(
+                      value: checkbox,
+                      activeColor: Colors.black54,
+                      onChanged: (value){
+                        setState(() {
+                          checkbox = !checkbox;
+                        });
+                      },
+                    ),
                     Text('Non Veg',
                       style: TextStyle(
                           fontSize: 12,
@@ -206,12 +213,15 @@ class _DonateScreenState extends State<DonateScreen> {
                 children: [
                   TextButton(
                     onPressed: (){
-                      CollectionReference colRef = FirebaseFirestore.instance.collection('orders');
-                      colRef.add({
-                        'veg': checkbox.toString(),
-
+                      db.collection('orders').add({
+                        'veg' : checkbox.toString(),
                       });
-                      //checkbox.toString();
+                      // CollectionReference colRef = FirebaseFirestore.instance.collection('orders');
+                      // colRef.add({
+                      //   'veg': checkbox.toString(),
+                      //
+                      // });
+                      checkbox.toString();
                       Navigator.pop(context);
                     },
                     child: Container(
