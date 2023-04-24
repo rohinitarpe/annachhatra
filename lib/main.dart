@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context)=>FoodData()),
-        ChangeNotifierProvider(create: (context)=>HotelData()),
+       // ChangeNotifierProvider(create: (context)=>HotelData()),
       ],
       child: MaterialApp(
         initialRoute: LoginScreen.id,
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           RegistrationScreen.id : (context) => RegistrationScreen(),
           HomeScreen.id : (context) => HomeScreen(),
           SideScreen.id : (context) => SideScreen(),
-          FoodDetailScreen.id : (context) => FoodDetailScreen(),
+          //FoodDetailScreen.id : (context) => FoodDetailScreen(),
           DonateScreen.id : (context) => DonateScreen(),
           DonationScreen.id : (context) =>DonationScreen(),
           PickUpScreen.id : (context) => PickUpScreen(),

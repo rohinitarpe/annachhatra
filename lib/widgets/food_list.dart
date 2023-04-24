@@ -1,3 +1,4 @@
+import 'package:annachhatra/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:annachhatra/models/food_data.dart';
 import 'package:annachhatra/widgets/food_tile.dart';
@@ -32,27 +33,27 @@ class FoodList extends StatelessWidget {
   }
 }
 
-class HotelList extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<HotelData>(
-        builder: (context,hotelData,child){
-          return ListView.builder(
-            shrinkWrap: true,
-              itemBuilder: (context,index){
-              final hotel = hotelData.hotels[index];
-              return HotelTile(
-                  hotelimageTile: hotel.hotelimage,
-                  qunatityTile: hotel.qunatity,
-                  namehotelTile: hotel.hotelname,
-                  infohotelTile: hotel.hotelinfo,
-                  onPressedTile: hotel.onViwbtn,
-              );
-              },
-            itemCount: hotelData.hotelCount,
-          );
-    },
-    );
-  }
-}
+// class HotelList extends StatelessWidget {
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<HotelData>(
+//         builder: (context,hotelData,child){
+//           return ListView.builder(
+//             shrinkWrap: true,
+//               itemBuilder: (context,index){
+//               final hotel = hotelData.hotels[index];
+//               return HotelTile(
+//                   hotelimageTile: hotel.hotelimage,
+//                   namehotelTile: hotel.hotelname,
+//                   infohotelTile: hotel.hotelinfo,
+//                 //qunatityTile: hotel.qunatity,
+//                 //  onPressedTile: hotel.onViwbtn,
+//               );
+//               },
+//             itemCount: hotelData.hotelCount,
+//           );
+//     },
+//     );
+//   }
+// }

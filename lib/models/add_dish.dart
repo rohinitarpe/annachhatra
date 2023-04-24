@@ -19,10 +19,13 @@ class Hotel{
   final String hotelimage;
   final String hotelname;
   final String hotelinfo;
-  String qunatity;
-  final onViwbtn;
+  // String qunatity;
+ // final onViwbtn;
 
-  Hotel({required this.hotelimage, required this.hotelname, required this.hotelinfo,required this.qunatity,required this.onViwbtn});
+  Hotel( this.hotelimage, this.hotelname,this.hotelinfo,
+    //required this.qunatity,
+   // required this.onViwbtn
+  );
 }
 
 

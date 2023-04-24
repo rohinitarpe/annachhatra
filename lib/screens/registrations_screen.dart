@@ -14,40 +14,61 @@ import 'dart:io';
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
  class _RegistrationScreenState extends State<RegistrationScreen> {
-   var image;
+   String imageUrl = '';
   final _auth = FirebaseAuth.instance;
-  late String email,password,verify_password,organization,address;
-   //FirebaseStorage _storage = FirebaseStorage.instance;
+  late String email,password,verify_password,organization,address,hotelimage;
+  // FirebaseStorage _storage = FirebaseStorage.instance;
+   final firebase = FirebaseFirestore.instance;
 
-  // uploadImage() async{
-  //   final picker = ImagePicker();
-  //   var pickedImage = await picker.pickImage(source: ImageSource.gallery);
-  //   var storageref = _storage.ref('image');
-  //   File a = new File(image!.path);
-  //   var task = storageref.putFile(a);
-  //   setState(() {
-  //     image = pickedImage!.path;
+   TextEditingController hotelnameController = TextEditingController();
+   TextEditingController addressController = TextEditingController();
+   TextEditingController emailController = TextEditingController();
+   TextEditingController passwordController = TextEditingController();
+   TextEditingController verifypaswrdController = TextEditingController();
+
+  // final imageUrlController = TextEditingController();
+   
+
+   // create() async{
+   //   try{
+   //     await firebase.collection('user').doc(hotelnameController.text).set({
+   //       'hotelname': hotelnameController.text, 'address': addressController.text,});
+   //   }catch(e){
+   //     print(e);
+   //   }
+   // }
+
+  // void uploadPic() async {
+  //   final Image = await ImagePicker().pickImage(source: ImageSource.gallery,);
+  //   Reference ref = FirebaseStorage.instance.ref().child('');
+  //
+  //   await ref.putFile(File(Image!.path));
+  //   ref.getDownloadURL().then((value) {
+  //     print(value);
+  //     setState(() {
+  //       imageUrl = value;
+  //     });
   //   });
   // }
-  //  uploadImage() async{
-  //    final _firebaseStorage = FirebaseStorage.instance;
-  //    final _imagePicker = ImagePicker();
-  //    PickedFile image;
-  //
-  //    image = (await _imagePicker.pickImage(source: ImageSource.gallery)) as PickedFile;
-  //    var file = File(image.path);
-  //    if(image != null){
-  //      var snapshot = await _firebaseStorage.ref()
-  //          .child('image')
-  //          .putFile(file).whenComplete(() => image);
-  //      var downloadUrl = await snapshot.ref.getDownloadURL();
-  //      setState(() {
-  //        imageUrl = downloadUrl;
-  //      });
-  //    }
-  //  }
 
+  ImagePicker image = ImagePicker();
+  String url ='';
+  File? file;
+  getImage() async{
+    var img = await image.pickImage(source: ImageSource.gallery);
+    setState(() {
+      file = File(img!.path);
+    });
+  }
 
+  uploadFile() async{
+    var imageFile = await FirebaseStorage.instance.ref().child('path').child('/jpg');
+    UploadTask task = imageFile.putFile(file!);
+    TaskSnapshot snapshot = await task;
+    url = await snapshot.ref.getDownloadURL();
+    await FirebaseFirestore.instance.collection('users').add({'imageUrl' : url});
+    print(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,18 +109,23 @@ import 'dart:io';
               ),
               Column(
                 children: [
-                  MaterialButton(
-                    onPressed: () {
-                     //uploadImage();
-                      new myupload().uploadPic();
+                  InkWell(
+                    onTap: () {
+                     //uploadPic();
+                      getImage();
+                      uploadFile();
                     },
                     child: Container(
                       //this code is to show image
-                      child: image != null ? Image.file(File(image),fit: BoxFit.cover,): null,
+                      //child: image != null ? Image.file(File(image),fit: BoxFit.cover,): null,
                       height: 136.0,
                       width: 185.0,
+                      // backgroundImage: file == null? AssetImage('')
+                      //     :FileImage(File(file!.path)) as ImageProvider,
+                      // child: imageUrl == '' ?
+                      // Icon(Icons.add,color: Colors.grey,): Image.network(imageUrl),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(196,196,196,1),
+                        color: Color.fromRGBO(196,196,196,1,),
                       ),
                     ),
                   ),
@@ -109,6 +135,7 @@ import 'dart:io';
           Column(
             children: [
               TextField(
+                controller: hotelnameController,
                 keyboardType: TextInputType.text,
                 textAlign: TextAlign.left,
                 onChanged: (value){
@@ -117,6 +144,7 @@ import 'dart:io';
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Organization/ hotel name'),
               ),
               TextField(
+                controller: addressController,
                 keyboardType: TextInputType.text,
                 textAlign: TextAlign.left,
                 onChanged: (value){
@@ -125,6 +153,7 @@ import 'dart:io';
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Address'),
               ),
               TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.left,
                 onChanged: (value){
@@ -133,6 +162,7 @@ import 'dart:io';
                 decoration: kTextFieldDecoration.copyWith(hintText: 'e-mail'),
               ),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 textAlign: TextAlign.left,
                 onChanged: (value){
@@ -141,6 +171,7 @@ import 'dart:io';
                 decoration: kTextFieldDecoration.copyWith(hintText: 'password'),
               ),
               TextField(
+                controller: verifypaswrdController,
                 obscureText: true,
                 textAlign: TextAlign.left,
                 onChanged: (value){
@@ -159,18 +190,24 @@ import 'dart:io';
                     borderRadius: BorderRadius.circular(30.0),
                     child: MaterialButton(
                       onPressed: () async {
-                        new myupload().uploadPic();
                      try{
-                       final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+                       final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password)
+                           .then((value){
+                             firebase.collection('users').add({
+                          'hotelname' : hotelnameController.text,
+                          'address' : addressController.text,
+                          // 'email': emailController.text,
+                          //  'pic url' : hotelnameController.text
+                             });
+                      Navigator.pushNamed(context, HomeScreen.id);
+                      });
                        if(newUser != null){
-                        Navigator.pushNamed(context, HomeScreen.id);
-
                        }
                      }
                      catch(e){
                        print(e);
                      }
-                    },
+                     },
                       minWidth: 200.0,
                       height: 42.0,
                       child: Text('Register',
@@ -193,15 +230,32 @@ import 'dart:io';
   }
 }
 
-class myupload{
-FirebaseStorage _storage = FirebaseStorage.instance;
-void uploadPic() async{
-  PickedFile? _image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-  var storageref = _storage.ref('images/');
-  File a = new File(_image!.path);
-  var task = storageref.putFile(a);
-}
-}
-
+// StreamBuilder<QuerySnapshot>(
+// stream:  FirebaseFirestore.instance.collection('users').snapshots(),
+// builder: (context,snapshot){
+// List<Row> userWidgets = [];
+// if(snapshot.hasData)
+// {
+// final users = snapshot.data?.docs.reversed.toList();
+// for(var user in users!)
+// {
+// final userWidget = Row(
+// mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// children: [
+// Text(user['hotelname']),
+// Text(user['address']),
+// //Text(user['hotelname']),
+// ],
+// );
+// userWidgets.add(userWidget);
+// }
+// }
+// return Expanded(
+// child: ListView(
+// children: userWidgets,
+// ),
+// );
+// }
+// )
 
 
